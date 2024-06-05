@@ -20,43 +20,19 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.11'
 
-      - name: Cache pip dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+
 
       - name: Install system dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-                  python3-dev \
-                  libxml2-dev \
-                  libxslt1-dev \
-                  zlib1g-dev \
-                  libsasl2-dev \
-                  libldap2-dev \
-                  build-essential \
-                  libssl-dev \
-                  libffi-dev \
-                  libmysqlclient-dev \
-                  libjpeg-dev \
-                  libpq-dev \
-                  libjpeg8-dev \
-                  liblcms2-dev \
-                  libblas-dev \
-                  libatlas-base-dev \
-                  gcc
+          sudo ./setup/debinstall.sh
 
       - name: Create and start virtual environment
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install --upgrade pip
+         
 
       - name: Install dependencies
         run: pip install -r requirements.txt
