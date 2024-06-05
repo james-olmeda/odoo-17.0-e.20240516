@@ -3,6 +3,7 @@
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
 name: Build and deploy Python app to Azure Web App - odooasg
+
 on:
   push:
     branches:
@@ -18,7 +19,7 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: Production
+    environment: dev
     
     steps:
       - uses: actions/checkout@v3
