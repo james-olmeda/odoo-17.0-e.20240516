@@ -9,7 +9,6 @@ on:
     branches:
       - main
   workflow_dispatch:
-
 env:
   AZURE_WEBAPP_NAME: odooasg    # set this to your application's name
   WORKING_DIRECTORY: '.'        # set this to the path to your path of working directory inside github repository, defaults to the repository root
@@ -20,8 +19,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: Production
-    permissions:
-      id-token: write #This is required for requesting the JWT
     steps:
       - uses: actions/checkout@v3
 
@@ -33,15 +30,15 @@ jobs:
 
       - name: Python install
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: |
+        run: | 
           sudo ./setup/debinstall.sh
           sudo apt install python${{ env.PYTHON_VERSION }}-venv
           python -m venv --copies antenv
           source antenv/bin/activate
           pip install setuptools
-
-       # Azure login1
- 
+      permissions:
+        id-token: write #This is required for requesting the JWT
+       # Azure login
       - name: Login to Azure
       - uses: azure/login@v1
         with:
@@ -55,8 +52,6 @@ jobs:
           mask-inputs: false
           general-settings-json: '{"linuxFxVersion": "PYTHON|${{ env.PYTHON_VERSION }}"}' #'General configuration settings as Key Value pairs'
       # deploy web app
-     
-
       - uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
