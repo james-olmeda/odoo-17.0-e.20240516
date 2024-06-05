@@ -15,10 +15,14 @@ env:
   PYTHON_VERSION: '3.10'        # set the version to use
   STARTUP_COMMAND: 'startup.sh'  
 
+permissions:
+  id-token: write # This is required for requesting the JWT
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
       - uses: actions/checkout@v4
 
