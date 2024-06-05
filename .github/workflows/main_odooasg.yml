@@ -19,16 +19,17 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: Production
+    
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Python version
+      - name: Setup Python 
         uses: actions/setup-python@v1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-
-      - name: Python install
+      #install dependencies
+      - name: python install
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: | 
           sudo ./setup/debinstall.sh
