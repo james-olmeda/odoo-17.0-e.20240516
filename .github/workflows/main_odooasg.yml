@@ -16,14 +16,11 @@ env:
   STARTUP_COMMAND: 'startup.sh'  
 
 permissions:
-  id-token: write # This is required for requesting the JWTq
+  id-token: write # This is required for requesting the JWT
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    environment: 'Production'
     steps:
       - uses: actions/checkout@v4
 
