@@ -33,8 +33,25 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libxml2-dev libxslt-dev libldap2-dev libsasl2-dev python3-dev gcc
-
+          sudo apt-get install -y \
+                  python3-dev \
+                  libxml2-dev \
+                  libxslt1-dev \
+                  zlib1g-dev \
+                  libsasl2-dev \
+                  libldap2-dev \
+                  build-essential \
+                  libssl-dev \
+                  libffi-dev \
+                  libmysqlclient-dev \
+                  libjpeg-dev \
+                  libpq-dev \
+                  libjpeg8-dev \
+                  liblcms2-dev \
+                  libblas-dev \
+                  libatlas-base-dev \
+                  gcc
+                  
       - name: Create and start virtual environment
         run: |
           python -m venv venv
