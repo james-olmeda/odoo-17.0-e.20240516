@@ -14,8 +14,13 @@ env:
   WORKING_DIRECTORY: '.'        # set this to the path to your path of working directory inside github repository, defaults to the repository root
   PYTHON_VERSION: '3.10'        # set the version to use
   STARTUP_COMMAND: 'startup.sh'  
+
+environment:
+  name: 'Production'
+  url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 permissions:
-  id-token: write
+  id-token: write # This is required for requesting the JWT
+
   
 jobs:
   build-and-deploy:
