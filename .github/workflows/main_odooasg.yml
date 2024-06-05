@@ -3,12 +3,12 @@
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
 name: Build and deploy Python app to Azure Web App - odooasg
-
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+
 env:
   AZURE_WEBAPP_NAME: odooasg    # set this to your application's name
   WORKING_DIRECTORY: '.'        # set this to the path to your path of working directory inside github repository, defaults to the repository root
