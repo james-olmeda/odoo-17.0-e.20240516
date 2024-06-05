@@ -37,7 +37,7 @@ jobs:
           source antenv/bin/activate
           pip install setuptools
 
-       # Azure login12
+       # Azure login123
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_GITHUB_SECRET }}
