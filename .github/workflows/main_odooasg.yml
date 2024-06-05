@@ -47,7 +47,7 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4F61B487A4D84DEB8520DBA52628E9CA }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A8052A95474D45648950D355E02C8B6E }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_754EBA962AC14EE3A89DDF0F4F54F6A7 }}  
-          enable-AzPSSession: true
+        
 
       - uses: azure/appservice-settings@v1
         with:
