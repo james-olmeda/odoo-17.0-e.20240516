@@ -18,10 +18,9 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: 'Production'
-   
-    
+    environment: Production
+    permissions:
+      id-token: write # This is required for requesting the JWT
     steps:
       - uses: actions/checkout@v4
 
@@ -42,8 +41,6 @@ jobs:
 
        # Azure login
       - uses: azure/login@v1
-        permissions:
-          id-token: write # This is required for requesting the JWT
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4F61B487A4D84DEB8520DBA52628E9CA }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A8052A95474D45648950D355E02C8B6E }}
