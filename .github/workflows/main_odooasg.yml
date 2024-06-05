@@ -15,13 +15,6 @@ env:
   PYTHON_VERSION: '3.10'        # set the version to use
   STARTUP_COMMAND: 'startup.sh'  
 
-environment:
-  name: 'Production'
-  url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-permissions:
-  id-token: write # This is required for requesting the JWT
-
-  
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -44,13 +37,14 @@ jobs:
           source antenv/bin/activate
           pip install setuptools
 
-       # Azure login12
+       # Azure login
       - uses: azure/login@v1
         with:
+          auth-type: IDENTITY
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4F61B487A4D84DEB8520DBA52628E9CA }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A8052A95474D45648950D355E02C8B6E }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_754EBA962AC14EE3A89DDF0F4F54F6A7 }}
-         
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_754EBA962AC14EE3A89DDF0F4F54F6A7 }}  
+          enable-AzPSSession: true
 
       - uses: azure/appservice-settings@v1
         with:
