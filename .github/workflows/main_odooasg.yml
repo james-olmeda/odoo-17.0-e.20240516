@@ -28,14 +28,14 @@ jobs:
         run: |
           sudo ./setup/debinstall.sh
 
-      - name: Create and start virtual environment
-        run: |
-          python3 -m venv venv
-          source venv/bin/activate
+      # - name: Create and start virtual environment
+      #   run: |
+      #     python3 -m venv venv
+      #     source venv/bin/activate
          
 
-      - name: Install dependencies
-        run: pip3 install -r requirements.txt
+      # - name: Install dependencies
+      #   run: pip3 install -r requirements.txt
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
