@@ -18,7 +18,11 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write # This is required for requesting the JWT
     steps:
       - uses: actions/checkout@v4
 
@@ -40,6 +44,9 @@ jobs:
        # Azure login123
       - uses: azure/login@v1
         with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4F61B487A4D84DEB8520DBA52628E9CA }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A8052A95474D45648950D355E02C8B6E }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_754EBA962AC14EE3A89DDF0F4F54F6A7 }}
           creds: ${{ secrets.AZURE_CREDENTIALS_GITHUB_SECRET }}
          
 
