@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.8'
 
       - name: Cache pip dependencies
         uses: actions/cache@v3
@@ -51,7 +51,7 @@ jobs:
                   libblas-dev \
                   libatlas-base-dev \
                   gcc
-                  
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
