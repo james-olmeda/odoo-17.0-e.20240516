@@ -1,4 +1,3 @@
-
 # Python on Linux Web App
 # Build a Python project (using Django/Flask/Bottle frameworks) and deploy it to Azure as a Linux web app.
 name: Build and deploy Python app to Azure Web App - odooasg
@@ -9,54 +8,59 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  AZURE_WEBAPP_NAME: odooasg     # set this to your application's name
-  WORKING_DIRECTORY: '.'        # set this to the path to your path of working directory inside github repository, defaults to the repository root
-  PYTHON_VERSION: '3.11'        # set the version to use
-  STARTUP_COMMAND: 'startup.sh'           # set this to the startup command required to start the gunicorn server. default it is empty
+  env:
+    AZURE_WEBAPP_NAME: odooasg     # set this to your application's name
+    WORKING_DIRECTORY: '.'        # set this to the path to your path of working directory inside github repository, defaults to the repository root
+    PYTHON_VERSION: '3.11'        # set the version to use
+    STARTUP_COMMAND: 'startup.sh'           # set this to the startup command required to start the gunicorn server. default it is empty
 
-name: Build and deploy Python app
-jobs:
- build-and-deploy:
-  runs-on: ubuntu-latest
+  name: Build and deploy Python app
+  jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write # This is required for requesting the JWT
+    steps:
+    # checkout the repo 
+    - uses: actions/checkout@v3
+    # setup python
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+      python-version: ${{ env.PYTHON_VERSION }}
+    # install dependencies
+    - name: python install
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+      sudo apt install python${{ env.PYTHON_VERSION }}-venv
+      python -m venv --copies antenv
+      source antenv/bin/activate
+      pip install setuptools
+      sudo ./setup/debinstall.sh
+      #  pip install -r requirements.txt
+    # Azure login
+    - uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4F61B487A4D84DEB8520DBA52628E9CA }}
+        tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A8052A95474D45648950D355E02C8B6E }}
+        subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_754EBA962AC14EE3A89DDF0F4F54F6A7 }}
 
-  steps:
-  # checkout the repo 
-  - uses: actions/checkout@v3
-  # setup python
-  - name: Setup Python
-    uses: actions/setup-python@v1
-    with:
-     python-version: ${{ env.PYTHON_VERSION }}
-  # install dependencies
-  - name: python install
-    working-directory: ${{ env.WORKING_DIRECTORY }}
-    run: |
-     sudo apt install python${{ env.PYTHON_VERSION }}-venv
-     python -m venv --copies antenv
-     source antenv/bin/activate
-     pip install setuptools
-     sudo ./setup/debinstall.sh
-    #  pip install -r requirements.txt
-  # Azure login
-  - uses: azure/login@v1
-    with:
-      client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4F61B487A4D84DEB8520DBA52628E9CA }}
-      tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A8052A95474D45648950D355E02C8B6E }}
-      subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_754EBA962AC14EE3A89DDF0F4F54F6A7 }}
-
-  - uses: azure/appservice-settings@v1
-    with:
-     app-name: ${{ env.AZURE_WEBAPP_NAME }}
-     mask-inputs: false
-     general-settings-json: '{"linuxFxVersion": "PYTHON|${{ env.PYTHON_VERSION }}"}' #'General configuration settings as Key Value pairs'
-  # deploy web app
-  - uses: azure/webapps-deploy@v2
-    with:
-     app-name: ${{ env.AZURE_WEBAPP_NAME }}
-     package: ${{ env.WORKING_DIRECTORY }}
-     startup-command: ${{ env.STARTUP_COMMAND }}
-  # Azure logout
-  - name: logout
-    run: |
-     az logout
+    - uses: azure/appservice-settings@v1
+      with:
+      app-name: ${{ env.AZURE_WEBAPP_NAME }}
+      slot-name: 'Production'
+      mask-inputs: false
+      general-settings-json: '{"linuxFxVersion": "PYTHON|${{ env.PYTHON_VERSION }}"}' #'General configuration settings as Key Value pairs'
+    # deploy web app
+    - uses: azure/webapps-deploy@v2
+      with:
+      app-name: ${{ env.AZURE_WEBAPP_NAME }}
+      package: ${{ env.WORKING_DIRECTORY }}
+      startup-command: ${{ env.STARTUP_COMMAND }}
+    # Azure logout
+    - name: logout
+      run: |
+      az logout
