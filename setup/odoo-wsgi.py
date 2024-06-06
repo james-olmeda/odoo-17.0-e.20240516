@@ -28,11 +28,11 @@ conf = odoo.tools.config
 #conf['addons_path'] = './odoo/addons,./addons'
 
 # Optional database config if not using local socket
-#conf['db_name'] = 'mycompany'
-#conf['db_host'] = 'localhost'
-#conf['db_user'] = 'foo'
-#conf['db_port'] = 5432
-#conf['db_password'] = 'secret'
+conf['db_name'] = 'admin'
+conf['db_host'] = 'asgodoodb.postgres.database.azure.com'
+conf['db_user'] = 'foo'
+conf['db_port'] = 5432
+conf['db_password'] = 'xohdos-goswa6-meMguh'
 
 #----------------------------------------------------------
 # Generic WSGI handlers application
@@ -45,7 +45,7 @@ odoo.service.server.load_server_wide_modules()
 # Gunicorn
 #----------------------------------------------------------
 # Standard OpenERP XML-RPC port is 8069
-bind = '127.0.0.1:8069'
+bind = '0.0.0.1:8000'
 pidfile = '.gunicorn.pid'
 workers = 4
 timeout = 240
