@@ -35,10 +35,13 @@ jobs:
       - name: python install
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
-          sudo ./setup/debinstall.sh
-          sudo apt install python${{ env.PYTHON_VERSION }}-venv
           python -m venv --copies antenv
           source antenv/bin/activate
+          sudo apt-get update
+          sudo apt install python3-pip libldap2-dev libpq-dev libsasl2-dev
+          sudo ./setup/debinstall.sh
+          sudo apt install python${{ env.PYTHON_VERSION }}-venv
+
           pip install setuptools
 
        # Azure login
